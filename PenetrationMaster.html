@@ -11,6 +11,8 @@
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play  АТ.</tw-noscript></noscript></tw-story>
 <tw-storydata name=" АТ" startnode="1" creator="Twine" creator-version="2.5.1" format="Harlowe" format-version="3.3.3" ifid="0895CCEC-F473-48E8-922E-7DBFBC3BEFC8" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-tag name="startup" color="red"></tw-tag><tw-tag name="footer" color="red"></tw-tag><tw-passagedata pid="1" name="boot" tags="" position="800,300" size="100,100">(set:num-type $money to 20)
 (set:num-type $intel to 20)
+(set:num-type $agil to 20)
+(set:num-type $times to 20)
 (set:bool-type $card1 to false)
 (set:bool-type $phone to false)
 (set:bool-type $notebook to false)
@@ -40,7 +42,10 @@
 (dialog: bind $item1, &quot;Выбери первый предмет&quot;, &quot;Ноутбук&quot;, &quot;Телефон&quot;,&quot;Бэйджик&quot;)
 (dialog: bind $item2, &quot;Выбери второй предмет&quot;, &quot;Карточка доступа 1&quot;, &quot;Нож&quot;,&quot;Маскировка&quot;)
 (if: $item2 is &quot;Карточка доступа 1&quot;)[(dialog: bind $item3, &quot;Выбери третий предмет&quot;, &quot;Веревка&quot;, &quot;Фигурка MyLittlePony&quot;,&quot;Дротик&quot;)]
-(else:)[(dialog: bind $item3, &quot;Выбери третий предмет&quot;, &quot;Карточка доступа 5&quot;, &quot;Веревка&quot;,&quot;Дротик&quot;)]]
+(if: $item2 is not &quot;Карточка доступа 1&quot;)[(dialog: bind $item3, &quot;Выбери третий предмет&quot;, &quot;Карточка доступа 5&quot;, &quot;Веревка&quot;,&quot;Дротик&quot;)]
+]
+
+
 
 Ну что, готов выдвигаться?
 (link:&quot;Да&quot;)[
@@ -74,9 +79,44 @@
 ]
 (else:)[
 (after:2000)[=
-(go-to:&quot;St1_2&quot;)]</tw-passagedata><tw-passagedata pid="4" name="St1_1" tags="" position="900,500" size="100,100">Я бы рекомендовал тебе быть немного увереннее в своих действиях. Мы тут не в игрушки играем
+(set:$loading to 0)
+(go-to:&quot;home&quot;)]</tw-passagedata><tw-passagedata pid="4" name="St1_1" tags="" position="900,500" size="100,100">Я бы рекомендовал тебе быть немного увереннее в своих действиях. Мы тут не в игрушки играем
 &lt;img src=&quot;https://klike.net/uploads/posts/2019-02/1549006023_2.jpg&quot;&gt;
-[[Понял, сэр|St1]]</tw-passagedata><tw-passagedata pid="5" name="St1_2" tags="" position="800,700" size="100,100"></tw-passagedata></tw-storydata>
+[[Понял, сэр|St1]]</tw-passagedata><tw-passagedata pid="5" name="home" tags="" position="800,600" size="100,100">Ты дома
+&lt;img src=&quot;https://klike.net/uploads/posts/2021-01/1611131156_6.jpg&quot;&gt;
+[[Тренажерка|train]]
+[[Библиотека|liba]]
+[[Магазин|shop]]
+[[Идем на дело|St2_1]]
+[[Проверить показатели|chk]]
+
+[[Захват компании|Stlst]]</tw-passagedata><tw-passagedata pid="6" name="train" tags="" position="900,600" size="100,100">Добро пожаловать в качалку
+&lt;img src=&quot;https://www.meme-arsenal.com/memes/ded8d831dac481ab6d98465e5303514b.jpg&quot;&gt;
+Тут ты можешь поднять свои навыки владения своим телом
+Осталось $times действий
+(if:$times &lt;1)[
+У вас не осталось действий :(
+]
+(else:)[
+(link:&quot;Тренироваться&quot;)[
+(set:$agil to ($agil + (random:1,5)))
+(set:$times to ($times - 1))
+(go-to:&quot;train&quot;)
+]]
+
+[[Вернуться домой|home]]</tw-passagedata><tw-passagedata pid="7" name="liba" tags="" position="700,600" size="100,100"></tw-passagedata><tw-passagedata pid="8" name="St2_1" tags="" position="800,800" size="100,100"></tw-passagedata><tw-passagedata pid="9" name="shop" tags="" position="1000,600" size="100,100"></tw-passagedata><tw-passagedata pid="10" name="Stlst" tags="" position="300,500" size="100,100"></tw-passagedata><tw-passagedata pid="11" name="chk" tags="" position="1100,600" size="100,100">Показатели:
+-Ловкость: $agil
+-Деньги: $money
+-Данные: $intel
+-Осталось действий: $times
+
+Вещи:
+-(if:$card1)[Карточка 1 уровня]
+-(if:$card5)[Карточка 5 уровня]
+-(if:$phone)[Телефон]
+-(if:$rope)[Веревка]
+
+[[Вернуться назад|home]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
