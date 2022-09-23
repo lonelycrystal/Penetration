@@ -12,7 +12,7 @@
 <tw-storydata name=" АТ" startnode="1" creator="Twine" creator-version="2.5.1" format="Harlowe" format-version="3.3.3" ifid="0895CCEC-F473-48E8-922E-7DBFBC3BEFC8" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-tag name="startup" color="red"></tw-tag><tw-tag name="footer" color="red"></tw-tag><tw-passagedata pid="1" name="boot" tags="" position="800,300" size="100,100">(set:num-type $money to 20)
 (set:num-type $intel to 20)
 (set:num-type $agil to 20)
-(set:num-type $times to 20)
+(set:num-type $times to 5)
 (set:bool-type $card1 to false)
 (set:bool-type $phone to false)
 (set:bool-type $notebook to false)
@@ -24,6 +24,8 @@
 (set:bool-type $mask to false)
 (set:bool-type $badge to false)
 (set:num-type $loading to 0)
+(set:num-type $dayt to 0)
+(set:num-type $timesmax to 5)
 
 
 (go-to:&quot;Start&quot;)	</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="800,500" size="100,100">&lt;img src=&quot;https://itglobal.com/wp-content/uploads/sites/7/2019/07/image2-1-1024x682.jpg&quot;&gt;
@@ -84,27 +86,103 @@
 &lt;img src=&quot;https://klike.net/uploads/posts/2019-02/1549006023_2.jpg&quot;&gt;
 [[Понял, сэр|St1]]</tw-passagedata><tw-passagedata pid="5" name="home" tags="" position="800,600" size="100,100">Ты дома
 &lt;img src=&quot;https://klike.net/uploads/posts/2021-01/1611131156_6.jpg&quot;&gt;
+Шел $dayt День подготовки
 [[Тренажерка|train]]
 [[Библиотека|liba]]
 [[Магазин|shop]]
 [[Идем на дело|St2_1]]
-[[Проверить показатели|chk]]
+[[Проверить показатели(Инвентарь)|chk]]
+(link:&quot;Отдохнуть 1 день&quot;)[
+(set:$dayt to ($dayt+1))
+(set:$times to $timesmax)
+(go-to:&quot;sleepov&quot;)
+]
+(if:$intel &gt; 40)[
+[[Пойти в место для медитации|medit]]
+]
+
 
 [[Захват компании|Stlst]]</tw-passagedata><tw-passagedata pid="6" name="train" tags="" position="900,600" size="100,100">Добро пожаловать в качалку
 &lt;img src=&quot;https://www.meme-arsenal.com/memes/ded8d831dac481ab6d98465e5303514b.jpg&quot;&gt;
 Тут ты можешь поднять свои навыки владения своим телом
+От ловкости зависит кол-во действий за день, а также ещё пара вещей(будет видно позже)
 Осталось $times действий
 (if:$times &lt;1)[
 У вас не осталось действий :(
 ]
 (else:)[
 (link:&quot;Тренироваться&quot;)[
-(set:$agil to ($agil + (random:1,5)))
+(set:$agil to ($agil + (random:1,3)))
 (set:$times to ($times - 1))
+(set:$timesmax to ($timesmax+(random:1,3)))
 (go-to:&quot;train&quot;)
 ]]
 
-[[Вернуться домой|home]]</tw-passagedata><tw-passagedata pid="7" name="liba" tags="" position="700,600" size="100,100"></tw-passagedata><tw-passagedata pid="8" name="St2_1" tags="" position="800,800" size="100,100"></tw-passagedata><tw-passagedata pid="9" name="shop" tags="" position="1000,600" size="100,100"></tw-passagedata><tw-passagedata pid="10" name="Stlst" tags="" position="300,500" size="100,100"></tw-passagedata><tw-passagedata pid="11" name="chk" tags="" position="1100,600" size="100,100">Показатели:
+[[Вернуться домой|loadh]]</tw-passagedata><tw-passagedata pid="7" name="liba" tags="" position="700,600" size="100,100">Добро пожаловать в библиотеку
+&lt;img src=http://1.bp.blogspot.com/-xzoMj5MLEpI/VVM_E8qJHQI/AAAAAAAAL4k/_vKQ4CHHqzk/s1600/bib20140526.jpg&gt;
+Тут вы можете поднять уровень интеллекта
+Вам в этом поможет Фрекен Бок
+
+Осталось действий:$times
+(link:&quot;Учить геометрию&quot;)[
+(if:$times &lt; 1)[
+(dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
+(go-to:&quot;liba&quot;)
+]
+(if:$times &gt; 0)[
+(set:$times to ($times - 1))
+(set:$intel to ($intel + (random:1,3)))
+(go-to:&quot;liba&quot;)
+]]
+(link:&quot;Помочь с уборкой&quot;)[
+(if:$times &lt; 1)[
+(dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
+(go-to:&quot;liba&quot;)
+]
+(if:$times &gt; 0)[
+(set:$times to ($times - 1))
+(set:$money to ($money + (random:3,7)))
+(go-to:&quot;liba&quot;)
+]]
+
+[[Домой|loadh]]
+</tw-passagedata><tw-passagedata pid="8" name="St2_1" tags="" position="800,900" size="100,100">Кодер забухал, дальше истории не будет
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="9" name="shop" tags="" position="1000,600" size="100,100">Здорово, Меченый
+&lt;img src=https://gameguru.ru/media/tinymce_images/mceclip0_JO6XHSz.png&gt;
+В благородство играть не буду. Пару монет отсыпешь - получишь товар
+
+Рублей: $money
+
+(link:&quot;Книги по Карате(10 рублей)&quot;)[
+(if:$money &lt; 10)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+]
+(if:$money &gt; 9)[
+(set:$money to ($money - 10))
+(set:$agil to ($agil + 5))
+]]
+(link:&quot;Книги по Программированию(10 рублей)&quot;)[
+(if:$money &lt; 10)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+]
+(if:$money &gt; 9)[
+(set:$money to ($money - 10))
+(set:$agil to ($agil + 5))
+]]
+(link:&quot;Курсы по увеличению выносливости(10 рублей)&quot;)[
+(if:$money &lt; 10)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+]
+(if:$money &gt; 9)[
+(set:$money is ($money - 10))
+(set:$timesmax to ($timesmax + 5))
+]]
+
+[[Магазин предметов|shop2]]
+[[Домой|loadh]]
+
+</tw-passagedata><tw-passagedata pid="10" name="Stlst" tags="" position="300,500" size="100,100">Кодер забухал, дальше истории не будет
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="11" name="chk" tags="" position="1100,600" size="100,100">Показатели:
 -Ловкость: $agil
 -Деньги: $money
 -Данные: $intel
@@ -115,8 +193,150 @@
 -(if:$card5)[Карточка 5 уровня]
 -(if:$phone)[Телефон]
 -(if:$rope)[Веревка]
+-(if:$notebook)[Ноутбук]
+-(if:$badge)[Бэйджик]
+-(if:$knife)[Нож]
+-(if:$mask)[Маскировка]
+-(if:$MLP)[Фигурка MyLittlePony]
+-(if:$dart)[Дротик]
+[[Вернуться назад|home]]</tw-passagedata><tw-passagedata pid="12" name="medit" tags="" position="600,600" size="100,100">Добро пожаловать в сад Дзен
+&lt;img src=https://cs7.pikabu.ru/post_img/2019/03/15/7/1552648431122476421.jpg&gt;
+Тут вы можете более эфективно прокачивать свой интеллект благодаря самопознанию, самоизучению
 
-[[Вернуться назад|home]]</tw-passagedata></tw-storydata>
+У вас осталось $times действий
+
+(link:&quot;Помедетировать&quot;)[
+(if:$times &lt; 1)[
+(dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
+(go-to:&quot;medit&quot;)
+]
+(if:$times &gt; 0)[
+(set:$times to ($times - 1))
+(set:$intel to ($intel + (random:3,6)))
+(go-to:&quot;medit&quot;)
+]]
+
+[[Домой|home]]</tw-passagedata><tw-passagedata pid="13" name="loadh" tags="" position="700,500" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+(if:$loading &lt; 100)[
+(after:(random:100,1000))[=
+(set:$loading to ($loading+(random:1,20)))
+(go-to:&quot;St1&quot;)
+]
+(else:)[
+(after:2000)[=
+(set:$loading to 0)
+(go-to:&quot;home&quot;)]</tw-passagedata><tw-passagedata pid="14" name="sleepov" tags="" position="800,700" size="100,100">&lt;img src=https://klike.net/uploads/posts/2019-08/1566375880_20.jpg&gt;
+(after:2000)[=
+(go-to:&quot;home&quot;)
+</tw-passagedata><tw-passagedata pid="15" name="shop2" tags="" position="1000,700" size="100,100">Добро пожаловать в магазин предметов
+&lt;img src=https://s.ura.news/1200/images/news/upload/news/580/239/1052580239/684698_Yugo_zapadniy_rayon_Ekaterinburg_pyaterochka_250x0_6240.4160.0.0.jpg&gt;
+
+У вас $money рублей
+
+-(if:$card1 is false)[(link:&quot;Карточка 1 доступа(30 рублей)&quot;)[
+(if:$money &lt; 30)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;29)[
+(set:$money to ($money - 30))
+(set:$card1 to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$card5 is false)[(link:&quot;Карточка 5 доступа(50 рублей)&quot;)[
+(if:$money &lt; 50)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;49)[
+(set:$money to ($money - 50))
+(set:$card5 to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$phone is false)[(link:&quot;Телефон(20 рублей)&quot;)[
+(if:$money &lt; 20)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;19)[
+(set:$money to ($money - 19))
+(set:$phone to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$rope is false)[(link:&quot;Веревка(10 рублей)&quot;)[
+(if:$money &lt; 10)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;9)[
+(set:$money to ($money - 10))
+(set:$rope to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$notebook is false)[(link:&quot;Ноутбук(50 рублей)&quot;)[
+(if:$money &lt; 50)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;49)[
+(set:$money to ($money - 50))
+(set:$notebook to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$badge is false)[(link:&quot;Бэйджик(5 рублей)&quot;)[
+(if:$money &lt; 5)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;4)[
+(set:$money to ($money - 5))
+(set:$badge to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$knife is false)[(link:&quot;Нож(5 рублей)&quot;)[
+(if:$money &lt; 5)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;4)[
+(set:$money to ($money - 5))
+(set:$knife to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$mask is false)[(link:&quot;Маскировка(20 рублей)&quot;)[
+(if:$money &lt; 20)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;19)[
+(set:$money to ($money - 20))
+(set:$mask to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$MLP is false)[(link:&quot;Фигурка MyLittlePony(100 рублей)&quot;)[
+(if:$money &lt; 100)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;99)[
+(set:$money to ($money - 100))
+(set:$MLP to true)
+(go-to:&quot;shop2&quot;)
+]]]
+-(if:$dart is false)[(link:&quot;Дротик(2 рублей)&quot;)[
+(if:$money &lt; 2)[
+(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(go-to:&quot;shop2&quot;)
+]
+(if:$money&gt;1)[
+(set:$money to ($money - 2))
+(set: $dart to true)
+(go-to:&quot;shop2&quot;)
+]]]
+
+
+[[В магазин умений|shop]]
+[[Домой|loadh]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
