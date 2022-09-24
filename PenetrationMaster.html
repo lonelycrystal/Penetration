@@ -26,7 +26,10 @@
 (set:num-type $loading to 0)
 (set:num-type $dayt to 0)
 (set:num-type $timesmax to 5)
-
+(set:num-type $farmedmon to 0)
+(set:num-type $coef1 to 0)
+(set:num-type $coef2 to 0)
+(set:num-type $coef3 to 0)
 
 (go-to:&quot;Start&quot;)	</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="800,500" size="100,100">&lt;img src=&quot;https://itglobal.com/wp-content/uploads/sites/7/2019/07/image2-1-1024x682.jpg&quot;&gt;
 (set:$name to (prompt:&quot;Введите ваше имя&quot;,&quot;АТ&quot;))
@@ -90,7 +93,7 @@
 [[Тренажерка|train]]
 [[Библиотека|liba]]
 [[Магазин|shop]]
-[[Идем на дело|St2_1]]
+[[Небольшое дело|St2_1]]
 [[Проверить показатели(Инвентарь)|chk]]
 (link:&quot;Отдохнуть 1 день&quot;)[
 (set:$dayt to ($dayt+1))
@@ -146,8 +149,7 @@
 ]]
 
 [[Домой|loadh]]
-</tw-passagedata><tw-passagedata pid="8" name="St2_1" tags="" position="800,900" size="100,100">Кодер забухал, дальше истории не будет
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="9" name="shop" tags="" position="1000,600" size="100,100">Здорово, Меченый
+</tw-passagedata><tw-passagedata pid="8" name="shop" tags="" position="1000,600" size="100,100">Здорово, Меченый
 &lt;img src=https://gameguru.ru/media/tinymce_images/mceclip0_JO6XHSz.png&gt;
 В благородство играть не буду. Пару монет отсыпешь - получишь товар
 
@@ -181,8 +183,8 @@
 [[Магазин предметов|shop2]]
 [[Домой|loadh]]
 
-</tw-passagedata><tw-passagedata pid="10" name="Stlst" tags="" position="300,500" size="100,100">Кодер забухал, дальше истории не будет
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="11" name="chk" tags="" position="1100,600" size="100,100">Показатели:
+</tw-passagedata><tw-passagedata pid="9" name="Stlst" tags="" position="300,500" size="100,100">Кодер забухал, дальше истории не будет
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="10" name="chk" tags="" position="1100,600" size="100,100">Показатели:
 -Ловкость: $agil
 -Деньги: $money
 -Данные: $intel
@@ -199,7 +201,20 @@
 -(if:$mask)[Маскировка]
 -(if:$MLP)[Фигурка MyLittlePony]
 -(if:$dart)[Дротик]
-[[Вернуться назад|home]]</tw-passagedata><tw-passagedata pid="12" name="medit" tags="" position="600,600" size="100,100">Добро пожаловать в сад Дзен
+[[Вернуться назад|home]]
+(set:$coef3 to 0)
+(if:$card1)[(set:$coef3 to ($coef3+1))]
+(if:$card5)[(set:$coef3 to ($coef3+1))]
+(if:$phone)[(set:$coef3 to ($coef3+1))]
+(if:$rope)[(set:$coef3 to ($coef3+1))]
+(if:$notebook)[(set:$coef3 to ($coef3+1))]
+(if:$badge)[(set:$coef3 to ($coef3+1))]
+(if:$knife)[(set:$coef3 to ($coef3+1))]
+(if:$mask)[(set:$coef3 to ($coef3+1))]
+(if:$MLP)[(set:$coef3 to ($coef3+1))]
+(if:$dart)[(set:$coef3 to ($coef3+1))]
+
+</tw-passagedata><tw-passagedata pid="11" name="medit" tags="" position="600,600" size="100,100">Добро пожаловать в сад Дзен
 &lt;img src=https://cs7.pikabu.ru/post_img/2019/03/15/7/1552648431122476421.jpg&gt;
 Тут вы можете более эфективно прокачивать свой интеллект благодаря самопознанию, самоизучению
 
@@ -216,19 +231,22 @@
 (go-to:&quot;medit&quot;)
 ]]
 
-[[Домой|home]]</tw-passagedata><tw-passagedata pid="13" name="loadh" tags="" position="700,500" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+[[Домой|home]]</tw-passagedata><tw-passagedata pid="12" name="loadh" tags="" position="700,500" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
 (if:$loading &lt; 100)[
 (after:(random:100,1000))[=
 (set:$loading to ($loading+(random:1,20)))
-(go-to:&quot;St1&quot;)
+(go-to:&quot;loadh&quot;)
 ]
 (else:)[
 (after:2000)[=
+(set:$coef1 to (round:(log:$agil)))
+(set:$coef2 to (round:(log:$intel)))
+
 (set:$loading to 0)
-(go-to:&quot;home&quot;)]</tw-passagedata><tw-passagedata pid="14" name="sleepov" tags="" position="800,700" size="100,100">&lt;img src=https://klike.net/uploads/posts/2019-08/1566375880_20.jpg&gt;
+(go-to:&quot;home&quot;)]</tw-passagedata><tw-passagedata pid="13" name="sleepov" tags="" position="800,700" size="100,100">&lt;img src=https://klike.net/uploads/posts/2019-08/1566375880_20.jpg&gt;
 (after:2000)[=
 (go-to:&quot;home&quot;)
-</tw-passagedata><tw-passagedata pid="15" name="shop2" tags="" position="1000,700" size="100,100">Добро пожаловать в магазин предметов
+</tw-passagedata><tw-passagedata pid="14" name="shop2" tags="" position="1000,700" size="100,100">Добро пожаловать в магазин предметов
 &lt;img src=https://s.ura.news/1200/images/news/upload/news/580/239/1052580239/684698_Yugo_zapadniy_rayon_Ekaterinburg_pyaterochka_250x0_6240.4160.0.0.jpg&gt;
 
 У вас $money рублей
@@ -336,6 +354,102 @@
 
 
 [[В магазин умений|shop]]
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="15" name="rob1" tags="" position="700,1000" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+(align:&quot;=&gt;&lt;=&quot;)+(box:&quot;X&quot;)[Воруем...]
+(if:$loading &lt; 100)[
+(after:(random:100,1000))[=
+(set:$loading to ($loading+(random:1,20)))
+(go-to:&quot;rob1&quot;)
+]
+(else:)[
+(after:2000)[=
+(set:$farmedmon to (($coef1*2)+($coef2*2)+($coef3*3)))
+(set:$loading to 0)
+(if:(random:1,6)is not 1)[
+(go-to:&quot;rob1.1&quot;)]
+(else:)[(go-to:&quot;rob1.2&quot;)]
+]
+
+
+</tw-passagedata><tw-passagedata pid="16" name="St2_1" tags="" position="800,900" size="100,100">Добро пожаловать в меню выбора задания
+&lt;img src=&quot;https://static.wikia.nocookie.net/payday-the-heistrus/images/d/d5/Holdout_%28where%29.png/revision/latest/scale-to-width-down/1200?cb=20220305175854&amp;path-prefix=ru&quot;&gt;
+Тут ты можешь пойти на небольшое дело, чтобы заработать деньжат. Количество полученных рублей зависит от твоих характеристик и вещей
+
+(if:$times &gt;0)[
+[[Ювелирный магазин|rob1]]
+(if:$agil &gt; 24)[[[Банк в маленьком городе|rob2]]]
+(else:)[
+Ваша ловкость слишком назкая для посещения небольшого банка
+]
+(if:$agil&gt;29)[[[Банк в Нью-Йорке|rob3]]]
+(else:)[
+Ваша ловкость слишком низкая для посещения Нью-Йоркского банка
+]]
+(if:$times&lt;1)[Вы слишком устали для совершения действия]
+
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="17" name="rob2" tags="" position="800,1000" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+(align:&quot;=&gt;&lt;=&quot;)+(box:&quot;X&quot;)[Воруем...]
+(if:$loading &lt; 100)[
+(after:(random:100,1000))[=
+(set:$loading to ($loading+(random:1,20)))
+(go-to:&quot;rob2&quot;)
+]
+(else:)[
+(after:2000)[=
+(set:$farmedmon to (($coef1*3)+($coef2*3)+($coef3*3)))
+(set:$loading to 0)
+(if:(random:1,6)is not 1)[
+(go-to:&quot;rob2.1&quot;)]
+(else:)[(go-to:&quot;rob2.2&quot;)]
+]
+
+</tw-passagedata><tw-passagedata pid="18" name="rob3" tags="" position="900,1000" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+(align:&quot;=&gt;&lt;=&quot;)+(box:&quot;X&quot;)[Воруем...]
+(if:$loading &lt; 100)[
+(after:(random:100,1000))[=
+(set:$loading to ($loading+(random:1,20)))
+(go-to:&quot;rob3&quot;)
+]
+(else:)[
+(after:2000)[=
+(set:$farmedmon to (($coef1*2)+($coef2*2)+($coef3*3)))
+(set:$loading to 0)
+(if:(random:1,6)is not 1)[
+(go-to:&quot;rob3.1&quot;)]
+(else:)[(go-to:&quot;rob3.2&quot;)]
+]
+
+</tw-passagedata><tw-passagedata pid="19" name="rob3.1" tags="" position="900,1100" size="100,100">&lt;img src=&quot;https://icdn.lenta.ru/images/2017/10/03/17/20171003175820839/detail_9ca2fcf36cc889821ee1506ccb7a306a.png&quot;&gt;
+Вы успешно завершили ограбление.
+Было заработано $farmedmon рублей
+(set:$money to ($money+$farmedmon))
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="20" name="rob2.1" tags="" position="800,1100" size="100,100">&lt;img src=&quot;https://icdn.lenta.ru/images/2017/10/03/17/20171003175820839/detail_9ca2fcf36cc889821ee1506ccb7a306a.png&quot;&gt;
+Вы успешно завершили ограбление.
+Было заработано $farmedmon рублей
+(set:$money to ($money+$farmedmon))
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="21" name="rob1.1" tags="" position="700,1100" size="100,100">&lt;img src=&quot;https://icdn.lenta.ru/images/2017/10/03/17/20171003175820839/detail_9ca2fcf36cc889821ee1506ccb7a306a.png&quot;&gt;
+Вы успешно завершили ограбление.
+Было заработано $farmedmon рублей
+(set:$money to ($money+$farmedmon))
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="22" name="rob1.2" tags="" position="700,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+К сожелению, вы провалили задание
+
+Попробуйте ещё раз позже
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="23" name="rob2.2" tags="" position="800,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+К сожелению, вы провалили задание
+
+Попробуйте ещё раз позже
+
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="24" name="rob3.2" tags="" position="900,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+К сожелению, вы провалили задание
+
+Попробуйте ещё раз позже
+
 [[Домой|loadh]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
