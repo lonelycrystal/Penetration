@@ -30,6 +30,12 @@
 (set:num-type $coef1 to 0)
 (set:num-type $coef2 to 0)
 (set:num-type $coef3 to 0)
+(set:num-type $intelget to 0)
+(set:num-type $moneyget to 0)
+(set:num-type $agilget to 0)
+(set:num-type $moneyloss to 0)
+(set:bool-type $limitter to false)
+
 
 (go-to:&quot;Start&quot;)	</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="800,500" size="100,100">&lt;img src=&quot;https://itglobal.com/wp-content/uploads/sites/7/2019/07/image2-1-1024x682.jpg&quot;&gt;
 (set:$name to (prompt:&quot;Введите ваше имя&quot;,&quot;АТ&quot;))
@@ -95,11 +101,7 @@
 [[Магазин|shop]]
 [[Небольшое дело|St2_1]]
 [[Проверить показатели(Инвентарь)|chk]]
-(link:&quot;Отдохнуть 1 день&quot;)[
-(set:$dayt to ($dayt+1))
-(set:$times to $timesmax)
-(go-to:&quot;sleepov&quot;)
-]
+[[Отдохнуть 1 день|sleepov]]
 (if:$intel &gt; 40)[
 [[Пойти в место для медитации|medit]]
 ]
@@ -109,75 +111,108 @@
 &lt;img src=&quot;https://www.meme-arsenal.com/memes/ded8d831dac481ab6d98465e5303514b.jpg&quot;&gt;
 Тут ты можешь поднять свои навыки владения своим телом
 От ловкости зависит кол-во действий за день, а также ещё пара вещей(будет видно позже)
+(if:$agilget is not 0)[+ $agilget Ловкости]
+(set: $intelget to 0)
 Осталось $times действий
-(if:$times &lt;1)[
-У вас не осталось действий :(
-]
-(else:)[
+
 (link:&quot;Тренироваться&quot;)[
-(set:$agil to ($agil + (random:1,3)))
+(if:$agil &lt; 100)[
+(if:$times is 0)[(dialog:&quot;У вас не осталось действий. Отдохните денёк&quot;,&quot;ок&quot;)
+(go-to:&quot;train&quot;)
+]
+(if:$times is not 0)[
+(set:$agilget to (random:1,3))
+(set:$agil to ($agil + $agilget))
 (set:$times to ($times - 1))
 (set:$timesmax to ($timesmax+(random:1,3)))
+(go-to:&quot;train&quot;)]]
+(if:$agil &gt; 99)[
+(dialog:&quot;Ваша ловкость достигла предела&quot;,&quot;ок&quot;)
+(set:$agil to 100)
 (go-to:&quot;train&quot;)
-]]
+]
+]
+
 
 [[Вернуться домой|loadh]]</tw-passagedata><tw-passagedata pid="7" name="liba" tags="" position="700,600" size="100,100">Добро пожаловать в библиотеку
 &lt;img src=http://1.bp.blogspot.com/-xzoMj5MLEpI/VVM_E8qJHQI/AAAAAAAAL4k/_vKQ4CHHqzk/s1600/bib20140526.jpg&gt;
 Тут вы можете поднять уровень интеллекта
 Вам в этом поможет Фрекен Бок
-
+(if:$intelget is not 0)[+ $intelget Интеллекта]
+(if:$moneyget is not 0)[+ $moneyget Рублей]
+(set: $intelget to 0)
+(set: $moneyget to 0)
 Осталось действий:$times
-(link:&quot;Учить геометрию&quot;)[
+(link:&quot;Учить геометрию(+ Интеллект)&quot;)[
+(if:$intel &lt; 99)[
 (if:$times &lt; 1)[
-(dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
+(dialog:&quot;У вас не осталось действий. Отдохните денёк&quot;,&quot;ок&quot;)
 (go-to:&quot;liba&quot;)
 ]
 (if:$times &gt; 0)[
 (set:$times to ($times - 1))
-(set:$intel to ($intel + (random:1,3)))
+(set:$intelget to (random:1,3))
+(set:$intel to ($intel + $intelget))
 (go-to:&quot;liba&quot;)
 ]]
-(link:&quot;Помочь с уборкой&quot;)[
+(if:$intel &gt; 99)[
+(dialog:&quot;Вы достигли предела ловкости&quot;,&quot;ок&quot;)
+(set:$intel to 100)
+(go-to:&quot;liba&quot;)
+]]
+(link:&quot;Помочь с уборкой(+ Деньги)&quot;)[
 (if:$times &lt; 1)[
 (dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
 (go-to:&quot;liba&quot;)
 ]
 (if:$times &gt; 0)[
 (set:$times to ($times - 1))
-(set:$money to ($money + (random:3,7)))
+(set:$moneyget to (random:3,7))
+(set:$money to ($money + $moneyget))
 (go-to:&quot;liba&quot;)
 ]]
 
-[[Домой|loadh]]
-</tw-passagedata><tw-passagedata pid="8" name="shop" tags="" position="1000,600" size="100,100">Здорово, Меченый
+
+(link:&quot;Домой&quot;)[
+(set: $intelget to 0)
+(set: $moneyget to 0)
+(go-to:&quot;loadh&quot;)
+]</tw-passagedata><tw-passagedata pid="8" name="shop" tags="" position="1000,600" size="100,100">Здорово, Меченый
 &lt;img src=https://gameguru.ru/media/tinymce_images/mceclip0_JO6XHSz.png&gt;
 В благородство играть не буду. Пару монет отсыпешь - получишь товар
 
 Рублей: $money
 
-(link:&quot;Книги по Карате(10 рублей)&quot;)[
-(if:$money &lt; 10)[
-(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
+(link:&quot;Книги по Карате(10 рублей)(+ Ловкость)&quot;)[
+(if:$agil &gt; 99)[
+(dialog:&quot;Ваша ловкость достигла предела&quot;,&quot;ок&quot;)
+(set:$agil to 100)
 ]
+(else:)[(if:$money &lt; 10)[(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)]
 (if:$money &gt; 9)[
 (set:$money to ($money - 10))
 (set:$agil to ($agil + 5))
-]]
-(link:&quot;Книги по Программированию(10 рублей)&quot;)[
-(if:$money &lt; 10)[
-(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
 ]
+(go-to:&quot;shop&quot;)
+]]
+(link:&quot;Книги по Программированию(10 рублей)(+ Интеллект)&quot;)[
+(if:$money &lt; 10)[(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)]
 (if:$money &gt; 9)[
 (set:$money to ($money - 10))
-(set:$agil to ($agil + 5))
+(set:$intel to ($intel + 5))
+(go-to:&quot;shop&quot;)
 ]]
-(link:&quot;Курсы по увеличению выносливости(10 рублей)&quot;)[
-(if:$money &lt; 10)[
-(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)
-]
+(link:&quot;Курсы по увеличению выносливости(10 рублей)(+ Кол-во действий)&quot;)[
+(if:$money &lt; 10)[(dialog:&quot;Вы слишком бедны для покупки&quot;,&quot;:(&quot;)]
 (if:$money &gt; 9)[
-(set:$money is ($money - 10))
+(set:$money to ($money - 10))
 (set:$timesmax to ($timesmax + 5))
+(go-to:&quot;shop&quot;)
+]]
+
+(if:$agil is 100)[
+(if:$intel is 100)[
+[[СНЯТЬ ЛИМИТЕРЫ|limitters]]
 ]]
 
 [[Магазин предметов|shop2]]
@@ -187,7 +222,7 @@
 [[Домой|loadh]]</tw-passagedata><tw-passagedata pid="10" name="chk" tags="" position="1100,600" size="100,100">Показатели:
 -Ловкость: $agil
 -Деньги: $money
--Данные: $intel
+-Интеллект: $intel
 -Осталось действий: $times
 
 Вещи:
@@ -202,36 +237,38 @@
 -(if:$MLP)[Фигурка MyLittlePony]
 -(if:$dart)[Дротик]
 [[Вернуться назад|home]]
-(set:$coef3 to 0)
-(if:$card1)[(set:$coef3 to ($coef3+1))]
-(if:$card5)[(set:$coef3 to ($coef3+1))]
-(if:$phone)[(set:$coef3 to ($coef3+1))]
-(if:$rope)[(set:$coef3 to ($coef3+1))]
-(if:$notebook)[(set:$coef3 to ($coef3+1))]
-(if:$badge)[(set:$coef3 to ($coef3+1))]
-(if:$knife)[(set:$coef3 to ($coef3+1))]
-(if:$mask)[(set:$coef3 to ($coef3+1))]
-(if:$MLP)[(set:$coef3 to ($coef3+1))]
-(if:$dart)[(set:$coef3 to ($coef3+1))]
+
 
 </tw-passagedata><tw-passagedata pid="11" name="medit" tags="" position="600,600" size="100,100">Добро пожаловать в сад Дзен
 &lt;img src=https://cs7.pikabu.ru/post_img/2019/03/15/7/1552648431122476421.jpg&gt;
 Тут вы можете более эфективно прокачивать свой интеллект благодаря самопознанию, самоизучению
-
+(if:$intelget is not 0)[+ $intelget Интеллекта]
+(set: $intelget to 0)
 У вас осталось $times действий
 
 (link:&quot;Помедетировать&quot;)[
+(if:$intel &lt; 99)[
 (if:$times &lt; 1)[
-(dialog:&quot;У вас не осталось действий&quot;,&quot;ок&quot;)
-(go-to:&quot;medit&quot;)
+(dialog:&quot;У вас не осталось действий. Отдохните денёк&quot;,&quot;ок&quot;)
+(go-to:&quot;liba&quot;)
 ]
 (if:$times &gt; 0)[
 (set:$times to ($times - 1))
-(set:$intel to ($intel + (random:3,6)))
-(go-to:&quot;medit&quot;)
+(set:$intelget to (random:1,3))
+(set:$intel to ($intel + $intelget))
+(go-to:&quot;liba&quot;)
+]]
+(if:$intel &gt; 99)[
+(dialog:&quot;Вы достигли предела ловкости&quot;,&quot;ок&quot;)
+(set:$intel to 100)
 ]]
 
-[[Домой|home]]</tw-passagedata><tw-passagedata pid="12" name="loadh" tags="" position="700,500" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+
+(link:&quot;Домой&quot;)[
+(set: $intelget to 0)
+(go-to:&quot;loadh&quot;)
+]</tw-passagedata><tw-passagedata pid="12" name="loadh" tags="" position="700,500" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
+(align:&quot;=&gt;&lt;=&quot;)+(box:&quot;X&quot;)[Идем домой...]
 (if:$loading &lt; 100)[
 (after:(random:100,1000))[=
 (set:$loading to ($loading+(random:1,20)))
@@ -241,10 +278,22 @@
 (after:2000)[=
 (set:$coef1 to (round:(log:$agil)))
 (set:$coef2 to (round:(log:$intel)))
-
+(set:$coef3 to 0)
+(if:$card1)[(set:$coef3 to ($coef3+1))]
+(if:$card5)[(set:$coef3 to ($coef3+5))]
+(if:$phone)[(set:$coef3 to ($coef3+2))]
+(if:$rope)[(set:$coef3 to ($coef3+3))]
+(if:$notebook)[(set:$coef3 to ($coef3+3))]
+(if:$badge)[(set:$coef3 to ($coef3+1))]
+(if:$knife)[(set:$coef3 to ($coef3+1))]
+(if:$mask)[(set:$coef3 to ($coef3+10))]
+(if:$MLP)[(set:$coef3 to ($coef3+100))]
+(if:$dart)[(set:$coef3 to ($coef3+1))]
 (set:$loading to 0)
 (go-to:&quot;home&quot;)]</tw-passagedata><tw-passagedata pid="13" name="sleepov" tags="" position="800,700" size="100,100">&lt;img src=https://klike.net/uploads/posts/2019-08/1566375880_20.jpg&gt;
 (after:2000)[=
+(set:$dayt to ($dayt+1))
+(set:$times to $timesmax)
 (go-to:&quot;home&quot;)
 </tw-passagedata><tw-passagedata pid="14" name="shop2" tags="" position="1000,700" size="100,100">Добро пожаловать в магазин предметов
 &lt;img src=https://s.ura.news/1200/images/news/upload/news/580/239/1052580239/684698_Yugo_zapadniy_rayon_Ekaterinburg_pyaterochka_250x0_6240.4160.0.0.jpg&gt;
@@ -363,8 +412,9 @@
 ]
 (else:)[
 (after:2000)[=
-(set:$farmedmon to (($coef1*2)+($coef2*2)+($coef3*3)))
+(set:$farmedmon to (random:(ceil:(($coef1*2)+($coef2*2)+$coef3)),((ceil:(($coef1*2)+($coef2*2)+$coef3))+20)))
 (set:$loading to 0)
+(set:$times to ($times-1))
 (if:(random:1,6)is not 1)[
 (go-to:&quot;rob1.1&quot;)]
 (else:)[(go-to:&quot;rob1.2&quot;)]
@@ -375,17 +425,19 @@
 &lt;img src=&quot;https://static.wikia.nocookie.net/payday-the-heistrus/images/d/d5/Holdout_%28where%29.png/revision/latest/scale-to-width-down/1200?cb=20220305175854&amp;path-prefix=ru&quot;&gt;
 Тут ты можешь пойти на небольшое дело, чтобы заработать деньжат. Количество полученных рублей зависит от твоих характеристик и вещей
 
-(if:$times &gt;0)[
-[[Ювелирный магазин|rob1]]
-(if:$agil &gt; 24)[[[Банк в маленьком городе|rob2]]]
-(else:)[
-Ваша ловкость слишком назкая для посещения небольшого банка
+(if:$times is not 0)[
+(link:&quot;Ювелирный магазин&quot;)[
+(go-to:&quot;rob1&quot;)]
+(link:&quot;Банк в маленьком городе&quot;)[(if:$agil &gt; 24)[(go-to:&quot;rob2&quot;)]
+(else:)[(dialog:&quot;Ваша ловкость слишком назкая для посещения небольшого банка&quot;, &quot;:(&quot;)]
+(go-to:&quot;St2_1&quot;)
 ]
-(if:$agil&gt;29)[[[Банк в Нью-Йорке|rob3]]]
-(else:)[
-Ваша ловкость слишком низкая для посещения Нью-Йоркского банка
+
+(link:&quot;Банк в Нью-Йорке&quot;)[(if:$agil&gt;29)[(go-to:&quot;rob3&quot;)]
+(else:)[(dialog:&quot;Ваша ловкость слишком низкая для посещения Нью-Йоркского банка&quot;,&quot;:(&quot;)]
+(go-to:&quot;St2_1&quot;)
 ]]
-(if:$times&lt;1)[Вы слишком устали для совершения действия]
+(if:$times is 0)[Вы слишком устали для совершения действия. Отдохните денек]
 
 
 [[Домой|loadh]]</tw-passagedata><tw-passagedata pid="17" name="rob2" tags="" position="800,1000" size="100,100">(b4r:&#39;solid&#39;)(meter: bind $loading, 100, &quot;X&quot;, red)
@@ -397,8 +449,9 @@
 ]
 (else:)[
 (after:2000)[=
-(set:$farmedmon to (($coef1*3)+($coef2*3)+($coef3*3)))
+(set:$farmedmon to (random:(ceil:(($coef1*3)+($coef2*3)+$coef3)),((ceil:(($coef1*3)+($coef2*3)+$coef3))+10))
 (set:$loading to 0)
+(set:$times to ($times-1))
 (if:(random:1,6)is not 1)[
 (go-to:&quot;rob2.1&quot;)]
 (else:)[(go-to:&quot;rob2.2&quot;)]
@@ -413,8 +466,9 @@
 ]
 (else:)[
 (after:2000)[=
-(set:$farmedmon to (($coef1*2)+($coef2*2)+($coef3*3)))
+(set:$farmedmon to (random:(ceil:(($coef1*4)+($coef2*4)+($coef3*2))),((ceil:(($coef1*4)+($coef2*4)+($coef3*2)))+20))
 (set:$loading to 0)
+(set:$times to ($times-1))
 (if:(random:1,6)is not 1)[
 (go-to:&quot;rob3.1&quot;)]
 (else:)[(go-to:&quot;rob3.2&quot;)]
@@ -435,22 +489,31 @@
 Было заработано $farmedmon рублей
 (set:$money to ($money+$farmedmon))
 
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="22" name="rob1.2" tags="" position="700,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="22" name="rob1.2" tags="" position="700,1200" size="100,100">(set:$moneyloss to (round:($money/2)))
+&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
 К сожелению, вы провалили задание
-
+Вы потеряли $moneyloss рублей
 Попробуйте ещё раз позже
-
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="23" name="rob2.2" tags="" position="800,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+(set:$money to ($money - $moneyloss))
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="23" name="rob2.2" tags="" position="800,1200" size="100,100">(set:$moneyloss to (round:($money/2)))
+&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
 К сожелению, вы провалили задание
-
+Вы потеряли $moneyloss рублей
 Попробуйте ещё раз позже
-
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="24" name="rob3.2" tags="" position="900,1200" size="100,100">&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
+(set:$money to ($money - $moneyloss))
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="24" name="rob3.2" tags="" position="900,1200" size="100,100">(set:$moneyloss to (round:($money/2)))
+&lt;img src=https://otvet.imgsmail.ru/download/85573131_0b5b48a8d14430d5a94b57669268bfb9_800.jpg&gt;
 К сожелению, вы провалили задание
-
+Вы потеряли $moneyloss рублей
 Попробуйте ещё раз позже
+(set:$money to ($money - $moneyloss))
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="25" name="limitters" tags="" position="1300,600" size="100,100">(set:$limitter to true)
+&lt;img src=https://static.wikia.nocookie.net/anime-crossover-characters-fight/images/4/42/245_0005.jpg/revision/latest/scale-to-width-down/640?cb=20141205183443&amp;path-prefix=ru&gt;
 
-[[Домой|loadh]]</tw-passagedata></tw-storydata>
+ВЫ ЧУВСТВУЕТЕ ОГРОМНЫЙ ПРИЛИВ СИЛ
+ВАМ ДОСТУПНО ДАЛЬНЕЙШЕЕ ПОВЫШЕНИЕ СПОСОБНОСТЕЙ
+
+[[]]</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
