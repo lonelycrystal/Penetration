@@ -34,8 +34,14 @@
 (set:num-type $moneyget to 0)
 (set:num-type $agilget to 0)
 (set:num-type $moneyloss to 0)
-(set:bool-type $limitter to false)
-
+(set:$temp1 to &quot;1&quot;)
+(set:num-type $temp11 to 0)
+(set:$temp2 to &quot;1&quot;)
+(set:num-type $temp22 to 0)
+(set:$temp3 to &quot;1&quot;)
+(set:num-type $temp33 to 0)
+(set:$temp4 to &quot;1&quot;)
+(set:num-type $temp44 to 0)
 
 (go-to:&quot;Start&quot;)	</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="800,500" size="100,100">&lt;img src=&quot;https://itglobal.com/wp-content/uploads/sites/7/2019/07/image2-1-1024x682.jpg&quot;&gt;
 (set:$name to (prompt:&quot;Введите ваше имя&quot;,&quot;АТ&quot;))
@@ -156,7 +162,7 @@
 (go-to:&quot;liba&quot;)
 ]]
 (if:$intel &gt; 99)[
-(dialog:&quot;Вы достигли предела ловкости&quot;,&quot;ок&quot;)
+(dialog:&quot;Вы достигли предела интеллекта&quot;,&quot;ок&quot;)
 (set:$intel to 100)
 (go-to:&quot;liba&quot;)
 ]]
@@ -210,16 +216,21 @@
 (go-to:&quot;shop&quot;)
 ]]
 
-(if:$agil is 100)[
-(if:$intel is 100)[
-[[СНЯТЬ ЛИМИТЕРЫ|limitters]]
-]]
 
 [[Магазин предметов|shop2]]
 [[Домой|loadh]]
 
-</tw-passagedata><tw-passagedata pid="9" name="Stlst" tags="" position="300,500" size="100,100">Кодер забухал, дальше истории не будет
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="10" name="chk" tags="" position="1100,600" size="100,100">Показатели:
+</tw-passagedata><tw-passagedata pid="9" name="Stlst" tags="" position="200,500" size="100,100">&lt;img src=https://content.assets.pressassociation.io/2020/04/22111452/b9dda619-0460-4c5d-8cf9-9ea608f0c481.jpg&gt;
+
+Добро пожаловать на стадию планирования вашего дела
+Вам необходимо иметь по 50 очков характеристик ловкости и интеллекта, чтобы продолжить.
+Если вы готовы приступить, тогдга отправляемся
+
+[[Подготовиться лучше|loadh]]
+
+(if:$agil &gt; 49)[
+(if:$intel &gt;49)[
+[[Погнали|deal1]]]]</tw-passagedata><tw-passagedata pid="10" name="chk" tags="" position="1100,600" size="100,100">Показатели:
 -Ловкость: $agil
 -Деньги: $money
 -Интеллект: $intel
@@ -247,19 +258,19 @@
 У вас осталось $times действий
 
 (link:&quot;Помедетировать&quot;)[
-(if:$intel &lt; 99)[
+(if:$intel &lt; 100)[
 (if:$times &lt; 1)[
 (dialog:&quot;У вас не осталось действий. Отдохните денёк&quot;,&quot;ок&quot;)
-(go-to:&quot;liba&quot;)
+(go-to:&quot;medit&quot;)
 ]
 (if:$times &gt; 0)[
 (set:$times to ($times - 1))
-(set:$intelget to (random:1,3))
+(set:$intelget to (random:3,6))
 (set:$intel to ($intel + $intelget))
-(go-to:&quot;liba&quot;)
+(go-to:&quot;medit&quot;)
 ]]
 (if:$intel &gt; 99)[
-(dialog:&quot;Вы достигли предела ловкости&quot;,&quot;ок&quot;)
+(dialog:&quot;Вы достигли предела интеллекта&quot;,&quot;ок&quot;)
 (set:$intel to 100)
 ]]
 
@@ -507,13 +518,48 @@
 Вы потеряли $moneyloss рублей
 Попробуйте ещё раз позже
 (set:$money to ($money - $moneyloss))
-[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="25" name="limitters" tags="" position="1300,600" size="100,100">(set:$limitter to true)
-&lt;img src=https://static.wikia.nocookie.net/anime-crossover-characters-fight/images/4/42/245_0005.jpg/revision/latest/scale-to-width-down/640?cb=20141205183443&amp;path-prefix=ru&gt;
-
-ВЫ ЧУВСТВУЕТЕ ОГРОМНЫЙ ПРИЛИВ СИЛ
-ВАМ ДОСТУПНО ДАЛЬНЕЙШЕЕ ПОВЫШЕНИЕ СПОСОБНОСТЕЙ
-
-[[]]</tw-passagedata></tw-storydata>
+[[Домой|loadh]]</tw-passagedata><tw-passagedata pid="25" name="deal1" tags="" position="200,600" size="100,100">&lt;img src=https://avatars.mds.yandex.net/i?id=f624b6bb69db2c9539ab17c643f26a7c-5231908-images-thumbs&amp;n=13&amp;exp=1&gt;
+(if:$badge)[(dialog:bind $temp1, &quot;Вы встретили охранника. Что будете использовать?&quot;,&quot;Бэйджик&quot;,&quot;Харизму&quot;,&quot;Быстрые ноги&quot;)]
+(else:)[(if:$mask)[
+(dialog:bind $temp1, &quot;Вы встретили охранника. Что будете использовать?&quot;,&quot;Маскировка&quot;,&quot;Харизму&quot;,&quot;Быстрые ноги&quot;)]]
+(else:)[(if:$rope)[
+(dialog:bind $temp1, &quot;Вы встретили охранника. Что будете использовать?&quot;,&quot;Веревку&quot;,&quot;Харизму&quot;,&quot;Быстрые ноги&quot;)]]
+(if:$temp1 is &quot;Бэйджик&quot;)[
+(set: $temp11 to 1)
+Вы показали свой бэйджик охраннику
+Он признал в вас своего человека
+Вы прошли без особых проблем
+[[Далее|beta]]
+]
+(if:$temp1 is &quot;Маскировка&quot;)[
+(set: $temp11 to 2)
+Вы надели маскировку
+Охранник признал в вас своего
+Вы прошли без особых проблем
+[[Далее|beta]]
+]
+(if:$temp1 is &quot;Веревка&quot;)[
+Вы решили использовать веревку как лассо
+(if:$agil &gt; 58)[
+(set: $temp11 to 3)
+Вы смогли накинуть её на шею охраннику
+Вы проникли в комнату охраны, отключили камеры видеонаблюдения
+[[Далее|beta]]]
+(if:$agil &lt; 59)[
+(set: $temp11 to 4)
+Вам не хватило ловкости для выполнения трюка
+[[Далее|beta]]]
+]
+(if:$temp1 is &quot;Харизму&quot;)[
+(set: $temp11 to 5)
+[[Далее|beta]]
+]
+(if:$temp1 is &quot;Быстрые ноги&quot;)[
+(set: $temp11 to 6)
+[[Далее|beta]]
+]</tw-passagedata><tw-passagedata pid="26" name="beta" tags="" position="600,300" size="100,100">Дальнейшее развитие истории не написано
+Зовите автора, чтобы решить проблему
+</tw-passagedata></tw-storydata>
 <script title="Twine engine code" data-main="harlowe">(function(){"use strict";
 var require,define;!function(){var e={},r={};require=function(i){var n=e[i];return n&&(r[i]=n[1].apply(void 0,n[0].map(require)),e[i]=void 0),r[i]},(define=function(r,i,n){if("function"==typeof r)return r();e[r]=[i,n]}).amd=!0}();/*!
  * https://github.com/paulmillr/es6-shim
